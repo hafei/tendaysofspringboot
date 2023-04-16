@@ -20,7 +20,6 @@ public class UserService {
 
         // generate 10 users with fake data
         for (int i = 0; i < 10; i++) {
-            int finalI = i;
             users.add(new User(){
                 {
                     setName(faker.name().fullName());
