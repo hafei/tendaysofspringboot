@@ -2,18 +2,22 @@ package com.example.tendaysofspringboot.service;
 
 import com.example.tendaysofspringboot.model.User;
 import com.github.javafaker.Faker;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.AutoPopulatingList;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private Faker faker;
+    private final Faker faker;
+    private final MongoTemplate mongoTemplate;
+    public UserService(Faker faker, MongoTemplate mongoTemplate) {
+        this.faker = faker;
+        this.mongoTemplate = mongoTemplate;
+    }
+
     public List<User> getAllUsers() {
         // generate 10 users with fake data
         List<User> users = new AutoPopulatingList<>(User.class);
@@ -28,6 +32,10 @@ public class UserService {
                 }
             });
         }
+        mongoTemplate.insertAll(users);
         return users;
+    }
+    public List<User> findAll(){
+        return mongoTemplate.findAll(User.class);
     }
 }
